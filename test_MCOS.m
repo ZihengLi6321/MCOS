@@ -1,4 +1,4 @@
-function [NMAE RMSE L weighted] = test_MCOS(para)%  (M,m,n,Omega,k,num)
+function [NMAE RMSE L weighted] = test_MCOS(para,lambda)%  (M,m,n,Omega,k,num)
 
 % parameters
 
@@ -13,7 +13,7 @@ data = para.data;
 Test_ind = para.test.Ind;
 Test_values = para.test.values;
 dif = para.dif;
-lambda = 0.12;%0.12 is the value of lambda, if there is no sparse noise, a large lambda will be better, like 1.5
+
 % parameters for algorithm
 % test algorithms
 [out] = MCOS(M,W,r,500,lambda);

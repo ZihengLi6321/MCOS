@@ -3,10 +3,7 @@ clc
 clear all
 m0 = 500;
 n0 = 500;
-r = 10;
-RE_sum = zeros(1,12);
-nmae_sum = zeros(1,12);
-rmse_sum = zeros(1,12);   
+r = 5;
 
 % mxn data matrix M with rank r
 U0 = rand(m0,r);
@@ -26,11 +23,13 @@ if add_outliers ==1
     W_O = (randn(m0,num)<0.6);
     O = O.*W_O;
     M = [M O];
+else
+    num = 0;
 end
 [m,n]=size(M);
 
 % Training data
-SR   = 0.6;                             % Sampling ratio
+SR   = 0.7;                             % Sampling ratio
 M_train = random_sampling(M, SR);
 Omega  = find(M_train);   % 
 data = M_train(Omega); 
@@ -52,7 +51,7 @@ end
 W = sparse(I,J,ones(length(Omega),1),m,n,length(Omega));
 
 % add sparse noise
-add_sparse = 1;
+add_sparse = 0;
 if add_sparse ==1
 G = double(rand(m,n) > 0.9);
 G = G.*W;
@@ -68,7 +67,9 @@ para.W = W;
 para.M0 = M0;
 para.dif = max(data)-min(data);
 
-[~, ~, L] = test_MCOS(para);    
+
+lambda = 1.5;%0.12 is the value of lambda, if there is no sparse noise, a large lambda will be better, like 1.5
+[~, ~, L] = test_MCOS(para,lambda);    
 L = L(:,1:n0);
 E_re = M0 - L;
 re = norm(E_re,'fro')/norm(M0,'fro');
