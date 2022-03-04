@@ -46,7 +46,7 @@ for k = 1:INITER
     V = V_hat*inD;
     V = V';
     
-    % update known data
+    % update missing elements
     X = U*V'+ b*ones(1,n)+E;
     X(z)= data;
        
