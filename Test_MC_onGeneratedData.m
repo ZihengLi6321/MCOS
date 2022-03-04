@@ -14,7 +14,6 @@ M0 = U0*V0; %+ones(m,n);
 M = M0;
 
 % adding column outiers
-
 add_outliers = 1;
 if add_outliers ==1
     ratio = 0.2;
@@ -29,7 +28,7 @@ end
 [m,n]=size(M);
 
 % Training data
-SR   = 0.7;                             % Sampling ratio
+SR   = 0.7;              % Sampling ratio
 M_train = random_sampling(M, SR);
 Omega  = find(M_train);   % 
 data = M_train(Omega); 
@@ -53,7 +52,7 @@ W = sparse(I,J,ones(length(Omega),1),m,n,length(Omega));
 % add sparse noise
 add_sparse = 0;
 if add_sparse ==1
-G = double(rand(m,n) > 0.9);
+G = double(rand(m,n) > 0.95);   % sparse noise ratio = 1-0.95 = 5%
 G = G.*W;
 M_train = M_train + G;
 end
@@ -68,7 +67,7 @@ para.M0 = M0;
 para.dif = max(data)-min(data);
 
 
-lambda = 1.5;%0.12 is the value of lambda, if there is no sparse noise, a large lambda will be better, like 1.5
+lambda = 1.5;  %lambda is a parameter that needs to be tunned, such as 0.12 for data matrix with sparse noise. If there is no sparse noise, a large lambda will be better, like 1.5
 [~, ~, L] = test_MCOS(para,lambda);    
 L = L(:,1:n0);
 E_re = M0 - L;
